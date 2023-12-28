@@ -572,3 +572,21 @@
                           (key-position c column row (map + (wall-locate2 wall-thickness 1  0) [(/ (mount-width c) 2) 0 0])))))]
     (->> (screw-insert-shape bottom-radius top-radius height)
          (translate [(first position) (second position) (/ height 2)]))))
+
+(defn screw-insert-countersunk [c column row bottom-radius top-radius height]
+  (let [lastcol     (flastcol (get c :configuration-ncols))
+        lastrow     (flastrow (get c :configuration-nrows 5))
+        shift-right (= column lastcol)
+        shift-left  (= column 0)
+        shift-up    (and (not (or shift-right shift-left)) (= row 0))
+        shift-down  (and (not (or shift-right shift-left)) (>= row lastrow))
+        wall-thickness (get c :configuration-wall-thickness 5)
+        position    (if shift-up
+                      (key-position c column row (map + (wall-locate2 wall-thickness 0  1) [0 (/ (mount-height c) 2) 0]))
+                      (if shift-down
+                        (key-position c column row (map - (wall-locate2 wall-thickness 0 -1) [0 (/ (mount-height c) 2) 0]))
+                        (if shift-left
+                          (map + (left-key-position c row 0) (wall-locate3 wall-thickness -1 0))
+                          (key-position c column row (map + (wall-locate2 wall-thickness 1  0) [(/ (mount-width c) 2) 0 0])))))]
+    (->> (cylinder [bottom-radius (+ top-radius 3)] 2)
+         (translate [(first position) (second position) 5]))))

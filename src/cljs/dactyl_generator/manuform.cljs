@@ -3,7 +3,7 @@
   (:require [scad-clj.model :refer [translate cube hull rotate cylinder union mirror extrude-linear polygon sphere difference color sphere-fn cylinder-fn project cut *fn*]]
             [dactyl-generator.util :refer [deg2rad bottom triangle-hulls]]
             [dactyl-generator.common
-             :as cmn :refer [screw-insert screw-insert-holes screw-insert-screw-holes screw-insert-outers
+             :as cmn :refer [screw-insert screw-insert-countersunk screw-insert-holes screw-insert-screw-holes screw-insert-outers
                              single-plate sa-cap sa-double-length mount-width mount-height plate-thickness
                              wall-locate1 wall-locate2 wall-locate3 key-position apply-key-geometry
                              web-post post-adj flastrow flastcol fmiddlerow fcenterrow fcornerrow bottom-hull]]))
@@ -1630,6 +1630,38 @@
            (screw-insert c 3              0               bottom-radius top-radius height)
            (screw-insert c lastloc        1               bottom-radius top-radius height))))
 
+(defn screw-placement-countersunk [c bottom-radius top-radius height]
+  (let [use-wide-pinky? (get c :configuration-use-wide-pinky?)
+        inner           (get c :configuration-inner-column)
+        first-screw-x   (case inner
+                          :innie 1
+                          :normie 0
+                          :outie -1)
+        second-screw-x  (case inner
+                          :innie 1.5
+                          :normie 0
+                          :outie -1.5)
+        lastcol         (flastcol (get c :configuration-ncols))
+        lastrow         (flastrow (get c :configuration-nrows))
+        lastloc         (if-not use-wide-pinky? (+ lastcol 0.1) (+ lastcol 0.5))
+        thumb-count     (get c :configuration-thumb-count)
+        is-five?        (= thumb-count :five)
+        is-three-mini?  (= thumb-count :three-mini)
+        var-middle-last (if is-three-mini? -0.3 (if is-five? -0 0.2))
+        y-middle-last   (+ lastrow var-middle-last)
+        x-middle-last   (if is-five? 1.6 2)]
+    (union (screw-insert-countersunk c first-screw-x  0               bottom-radius top-radius height)
+           (screw-insert c first-screw-x  0               bottom-radius top-radius height)
+           (screw-insert-countersunk c second-screw-x (- lastrow 0.8) bottom-radius top-radius height)
+           (screw-insert c second-screw-x (- lastrow 0.8) bottom-radius top-radius height)
+           (screw-insert-countersunk c x-middle-last  y-middle-last   bottom-radius top-radius height)
+           (screw-insert c x-middle-last  y-middle-last   bottom-radius top-radius height)
+           (screw-insert-countersunk c 3              0               bottom-radius top-radius height)
+           (screw-insert c 3              0               bottom-radius top-radius height)
+           (screw-insert-countersunk c lastloc        1               bottom-radius top-radius height)
+           (screw-insert c lastloc        1               bottom-radius top-radius height))))
+
+
 (def wire-post-height 7)
 (def wire-post-overhang 3.5)
 (def wire-post-diameter 2.6)
@@ -1725,7 +1757,7 @@
                              (screw-insert-outers screw-placement c)
                              ())
         screw-inners       (if use-screw-inserts?
-                             (translate [0 0 -2] (screw-insert-screw-holes screw-placement c))
+                             (translate [0 0 -2] (screw-insert-screw-holes screw-placement-countersunk c))
                              ())
         bot                (cut (translate [0 0 -0.1] (union (case-walls c) screw-outers)))
         inner-thing        (difference (union (extrude-linear {:height 5
