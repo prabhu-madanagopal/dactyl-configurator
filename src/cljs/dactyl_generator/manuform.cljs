@@ -1507,6 +1507,12 @@
                 (+ (second (trrs-holder-position c))
                    (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
                 (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+    (->> (binding [*fn* 30] (cylinder 3.55 2)) ; wall thickness offset
+    (rotate (deg2rad  90) [1 0 0])
+    (translate [(first (trrs-holder-position c))
+                (+ (second (trrs-holder-position c))
+                   (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
+                (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
   ; rectangular trrs holder
    (->> (apply cube trrs-holder-hole-size)
         (translate [(first (trrs-holder-position c))
