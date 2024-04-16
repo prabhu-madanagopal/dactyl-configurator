@@ -1483,7 +1483,7 @@
   (translate (trrs-usb-holder-position c) (cube 25 12 4)))
 
 (defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 7.1 16 2.1)))
-(defn trrs-usb-jack-offset [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 9.1 12 8.1)))
+(defn trrs-usb-jack-offset [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 11 12 8.1)))
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
 (def trrs-holder-hole-size [6.2 11 6]) ; trrs jack PJ-320A
