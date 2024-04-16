@@ -1482,7 +1482,8 @@
 (defn trrs-usb-holder-holder [c]
   (translate (trrs-usb-holder-position c) (cube 19 12 4)))
 
-(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 8.1 40 3.1)))
+(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 7.1 16 2.1)))
+(defn trrs-usb-jack-offset [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 9.1 12 8.1)))
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
 (def trrs-holder-hole-size [6.2 11 6]) ; trrs jack PJ-320A
@@ -1507,7 +1508,7 @@
                 (+ (second (trrs-holder-position c))
                    (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
                 (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
-    (->> (binding [*fn* 30] (cylinder 3.55 2)) ; wall thickness offset
+    (->> (binding [*fn* 30] (cylinder 4.55 2)) ; wall thickness offset
     (rotate (deg2rad  90) [1 0 0])
     (translate [(first (trrs-holder-position c))
                 (+ (second (trrs-holder-position c))
@@ -1742,9 +1743,11 @@
        (if-not use-external-holder?
          (case connector-type
            :usb (union  (trrs-usb-holder-space c)
+                        (trrs-usb-jack-offset c)
                         (trrs-usb-jack c))
            :trrs (union (trrs-holder-hole c)
                         (trrs-usb-holder-space c)
+                        (trrs-usb-jack-offset c)
                         (trrs-usb-jack c))
            :rj9 (cmn/usb-holder-hole fusb-holder-position c)
            ())
