@@ -1628,7 +1628,7 @@
         thumb-count     (get c :configuration-thumb-count)
         is-five?        (= thumb-count :five)
         is-three-mini?  (= thumb-count :three-mini)
-        var-middle-last (if is-three-mini? -0.3 (if is-five? -0 0.2))
+        var-middle-last (if is-three-mini? -0.3 (if is-five? -0 0))
         y-middle-last   (+ lastrow var-middle-last)
         x-middle-last   (if is-five? 1.6 2)]
     (union (screw-insert c first-screw-x  0               bottom-radius top-radius height)
@@ -1654,7 +1654,7 @@
         thumb-count     (get c :configuration-thumb-count)
         is-five?        (= thumb-count :five)
         is-three-mini?  (= thumb-count :three-mini)
-        var-middle-last (if is-three-mini? -0.3 (if is-five? -0 0.2))
+        var-middle-last (if is-three-mini? -0.3 (if is-five? -0 0))
         y-middle-last   (+ lastrow var-middle-last)
         x-middle-last   (if is-five? 1.6 2)]
     (union (screw-insert-countersunk c first-screw-x  0               bottom-radius top-radius height)
