@@ -1777,7 +1777,12 @@
                                        screw-inners)]
     ;; (difference (translate [0 0 -0.1] (extrude-linear {:height 3} inner-thing))
     ;;             screw-inners)))
-    (difference (extrude-linear {:height 3} bot) screw-inners)))
+    (difference (extrude-linear {:height 3} bot) screw-inners
+    (translate [8 12 2] (cylinder (/ 8.5 2) 2.1))
+    (translate [8,-48,2] (cylinder (/ 8.5 2) 2.1))
+    (translate [-90,20,2] (cylinder (/ 8.5 2) 2.1))
+    (translate [-80,-65,2] (cylinder (/ 8.5 2) 2.1))
+    (translate [-40,40,2] (cylinder (/ 8.5 2) 2.1)))))
 
 (defn plate-left [c]
   (mirror [-1 0 0] (plate-right c)))
