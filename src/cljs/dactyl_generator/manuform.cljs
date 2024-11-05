@@ -1760,6 +1760,28 @@
 (defn model-left [c]
   (mirror [-1 0 0] (model-right c)))
 
+
+(defn cold-shoe []
+  (let [width 18
+        height 5
+        length 20
+        slide-width 10
+        slide-height 3
+        base-thickness 5
+        base-length 25
+        base-width 22]
+    (union
+      ;; Base of the cold shoe
+      (difference
+        (cube base-length base-width base-thickness)
+        (translate [-3 0 0]
+          (cube length width slide-height))
+        (translate [-3 0 0]
+          (cube length slide-width height)))
+
+      ;; Rails for accessory attachment
+      )))
+
 (defn plate-right [c]
   (let [use-screw-inserts? (get c :configuration-use-screw-inserts?)
         screw-outers       (if use-screw-inserts?
@@ -1777,12 +1799,18 @@
                                        screw-inners)]
     ;; (difference (translate [0 0 -0.1] (extrude-linear {:height 3} inner-thing))
     ;;             screw-inners)))
-    (difference (extrude-linear {:height 3} bot) screw-inners
-    (translate [8 12 2] (cylinder (/ 8.5 2) 2.1))
-    (translate [8,-48,2] (cylinder (/ 8.5 2) 2.1))
-    (translate [-90,20,2] (cylinder (/ 8.5 2) 2.1))
-    (translate [-80,-65,2] (cylinder (/ 8.5 2) 2.1))
-    (translate [-40,40,2] (cylinder (/ 8.5 2) 2.1)))))
+
+    (union (translate [-70,-25,5] (cold-shoe))
+(difference (extrude-linear {:height 3} bot) screw-inners
+    ;;(translate [-70,-25,2] (cylinder (/ 9.5 2) 4))
+    ;;(translate [8 12 2] (cylinder (/ 8.5 2) 2.1))
+    ;;(translate [8,-48,2] (cylinder (/ 8.5 2) 2.1))
+    ;;(translate [-90,20,2] (cylinder (/ 8.5 2) 2.1))
+    ;;(translate [-80,-65,2] (cylinder (/ 8.5 2) 2.1))
+    ;;(translate [-40,40,2] (cylinder (/ 8.5 2) 2.1))
+    )
+    )
+    ))
 
 (defn plate-left [c]
   (mirror [-1 0 0] (plate-right c)))
